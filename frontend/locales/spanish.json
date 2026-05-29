@@ -1,0 +1,17 @@
+{
+  "dropReset": "Reinicio de Drop",
+  "dropResetUnavailable": "Reinicio de Drop (no disponible)",
+  "csDropReset": "Reinicio de Drop de Counter-Strike",
+  "csDropResetTooltip": "Los drops semanales de CS se reinician cada miércoles a la 1 AM GMT.",
+  "localCountdown": "Cuenta regresiva para tu zona horaria local:",
+  "day": "día",
+  "days": "días",
+  "hour": "hora",
+  "hours": "horas",
+  "minute": "minuto",
+  "minutes": "minutos",
+  "second": "segundo",
+  "seconds": "segundos",
+  "updateAvailable": "Actualización disponible: {version}",
+  "updateAvailableTooltip": "La versión {version} está disponible. Haz clic para abrir la página de descarga."
+}

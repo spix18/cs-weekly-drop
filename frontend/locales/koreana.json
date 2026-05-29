@@ -1,0 +1,17 @@
+{
+  "dropReset": "드롭 초기화",
+  "dropResetUnavailable": "드롭 초기화 (사용 불가)",
+  "csDropReset": "Counter-Strike 드롭 초기화",
+  "csDropResetTooltip": "CS 주간 드롭은 매주 수요일 GMT 오전 1시에 초기화됩니다.",
+  "localCountdown": "현지 시간대 기준 카운트다운:",
+  "day": "일",
+  "days": "일",
+  "hour": "시간",
+  "hours": "시간",
+  "minute": "분",
+  "minutes": "분",
+  "second": "초",
+  "seconds": "초",
+  "updateAvailable": "업데이트 가능: {version}",
+  "updateAvailableTooltip": "버전 {version}이(가) 출시되었습니다. 클릭하여 다운로드 페이지를 엽니다."
+}
