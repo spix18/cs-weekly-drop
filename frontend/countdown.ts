@@ -38,7 +38,7 @@ function pad(value: number): string {
 
 export function shortForm(c: Countdown): string {
   const clock = `${pad(c.hours)}:${pad(c.minutes)}:${pad(c.seconds)}`;
-  return c.days > 0 ? `${c.days}d ${clock}` : clock;
+  return c.days > 0 ? `${c.days}${t("dayShort")} ${clock}` : clock;
 }
 
 export function longForm(c: Countdown): string {
@@ -52,8 +52,8 @@ export function longForm(c: Countdown): string {
   ].join(", ");
 }
 
-export function localStamp(d: Date): string {
-  return d.toLocaleString(undefined, {
+export function localStamp(d: Date, locale: string): string {
+  return d.toLocaleString(locale, {
     weekday: "short",
     day: "2-digit",
     month: "short",

@@ -35,7 +35,25 @@ const bundles: Record<string, LocaleMap> = {
   brazilian,
 };
 
+const bcp47: Record<string, string> = {
+  english: "en",
+  schinese: "zh-CN",
+  tchinese: "zh-TW",
+  russian: "ru",
+  german: "de",
+  spanish: "es",
+  french: "fr",
+  japanese: "ja",
+  koreana: "ko",
+  brazilian: "pt-BR",
+};
+
 let active: LocaleMap = english;
+let activeCode = "english";
+
+export function currentLocale(): string {
+  return bcp47[activeCode] ?? bcp47["english"] ?? "en";
+}
 
 export function t(key: string, params?: Record<string, string>): string {
   let value = active[key] ?? english[key] ?? key;
@@ -52,8 +70,10 @@ export async function loadLocale(): Promise<void> {
     const lang: string = await (window as any).SteamClient?.Settings?.GetCurrentLanguage?.();
     if (lang && bundles[lang]) {
       active = bundles[lang];
+      activeCode = lang;
     }
   } catch {
     active = english;
+    activeCode = "english";
   }
 }

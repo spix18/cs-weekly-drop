@@ -13,5 +13,6 @@
   "second": "segundo",
   "seconds": "segundos",
   "updateAvailable": "Atualização disponível: {version}",
-  "updateAvailableTooltip": "A versão {version} está disponível. Clique para abrir a página de download."
+  "updateAvailableTooltip": "A versão {version} está disponível. Clique para abrir a página de download.",
+  "dayShort": "d"
 }

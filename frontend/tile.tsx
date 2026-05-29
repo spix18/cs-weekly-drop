@@ -2,7 +2,7 @@ import { findClassModule, findModuleDetailsByExport } from '@steambrew/client';
 import { Component, ErrorInfo, ReactNode, useEffect, useState } from 'react';
 import { countdownTo, localStamp, longForm, nextReset, shortForm } from './countdown';
 import { fail } from './log';
-import { t } from './locale';
+import { currentLocale, t } from './locale';
 import { availableVersion, openRelease } from './updater';
 
 type StyleMap = Record<string, string>;
@@ -114,7 +114,7 @@ function DropResetTile() {
       <br />
       <strong>{longForm(left)}</strong>
       <br />
-      {localStamp(target)}
+      {localStamp(target, currentLocale())}
     </>
   );
 
