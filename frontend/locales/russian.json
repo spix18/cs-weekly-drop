@@ -1,0 +1,16 @@
+{
+  "dropReset": "Сброс дропа",
+  "dropResetUnavailable": "Сброс дропа (недоступно)",
+  "csDropReset": "Сброс дропа Counter-Strike",
+  "csDropResetTooltip": "Еженедельный сброс дропа CS происходит каждую среду в 1:00 по Гринвичу.",
+  "localCountdown": "Обратный отсчёт для вашего часового пояса:",
+  "day": "день",
+  "days": "дней",
+  "hour": "час",
+  "hours": "часов",
+  "minute": "минута",
+  "minutes": "минут",
+  "second": "секунда",
+  "seconds": "секунд",
+  "dayShort": "д"
+}

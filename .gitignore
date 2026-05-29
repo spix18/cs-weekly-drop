@@ -1,0 +1,18 @@
+node_modules/
+.millennium/
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Release packaging output
+package/
+*.zip
+
+# Local developer / agent tooling (not part of the published plugin)
+.devin/
+.vscode/
+.db-temp/
+AGENTS.md
+SKILL.md
+DEV_SETUP.md
+tools/
