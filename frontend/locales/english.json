@@ -1,0 +1,16 @@
+{
+  "dropReset": "Drop Reset",
+  "dropResetUnavailable": "Drop Reset (unavailable)",
+  "csDropReset": "Counter-Strike Drop Reset",
+  "csDropResetTooltip": "Counter-Strike weekly drops reset every Wednesday at 1 AM GMT.",
+  "localCountdown": "Below is a countdown for your local timezone:",
+  "day": "day",
+  "days": "days",
+  "hour": "hour",
+  "hours": "hours",
+  "minute": "minute",
+  "minutes": "minutes",
+  "second": "second",
+  "seconds": "seconds",
+  "dayShort": "d"
+}

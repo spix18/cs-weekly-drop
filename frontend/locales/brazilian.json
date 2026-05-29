@@ -1,0 +1,16 @@
+{
+  "dropReset": "Reinício de Drop",
+  "dropResetUnavailable": "Reinício de Drop (indisponível)",
+  "csDropReset": "Reinício de Drop do Counter-Strike",
+  "csDropResetTooltip": "Os drops semanais do CS são reiniciados toda quarta-feira à 1h GMT.",
+  "localCountdown": "Contagem regressiva para seu fuso horário local:",
+  "day": "dia",
+  "days": "dias",
+  "hour": "hora",
+  "hours": "horas",
+  "minute": "minuto",
+  "minutes": "minutos",
+  "second": "segundo",
+  "seconds": "segundos",
+  "dayShort": "d"
+}
