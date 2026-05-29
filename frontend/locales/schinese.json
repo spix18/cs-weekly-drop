@@ -1,0 +1,18 @@
+{
+  "dropReset": "掉落重置",
+  "dropResetUnavailable": "掉落重置（不可用）",
+  "csDropReset": "Counter-Strike 掉落重置",
+  "csDropResetTooltip": "CS 每周掉落在北京时间每周三上午 9:00 重置。",
+  "localCountdown": "以下是您当地时区的倒计时：",
+  "day": "天",
+  "days": "天",
+  "hour": "小时",
+  "hours": "小时",
+  "minute": "分钟",
+  "minutes": "分钟",
+  "second": "秒",
+  "seconds": "秒",
+  "updateAvailable": "有新版本：{version}",
+  "updateAvailableTooltip": "新版本 {version} 已发布。点击打开下载页面。",
+  "dayShort": "天"
+}

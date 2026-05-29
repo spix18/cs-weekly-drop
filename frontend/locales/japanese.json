@@ -1,0 +1,18 @@
+{
+  "dropReset": "ドロップリセット",
+  "dropResetUnavailable": "ドロップリセット（利用不可）",
+  "csDropReset": "Counter-Strike ドロップリセット",
+  "csDropResetTooltip": "CSの週次ドロップは毎週水曜日GMT午前1時にリセットされます。",
+  "localCountdown": "あなたのローカルタイムゾーンのカウントダウン：",
+  "day": "日",
+  "days": "日",
+  "hour": "時間",
+  "hours": "時間",
+  "minute": "分",
+  "minutes": "分",
+  "second": "秒",
+  "seconds": "秒",
+  "updateAvailable": "アップデートあり：{version}",
+  "updateAvailableTooltip": "バージョン {version} が利用可能です。クリックしてダウンロードページを開きます。",
+  "dayShort": "日"
+}

@@ -1,0 +1,18 @@
+{
+  "dropReset": "Drop-Reset",
+  "dropResetUnavailable": "Drop-Reset (nicht verfügbar)",
+  "csDropReset": "Counter-Strike Drop-Reset",
+  "csDropResetTooltip": "Der wöchentliche CS-Drop wird jeden Mittwoch um 1 Uhr GMT zurückgesetzt.",
+  "localCountdown": "Countdown für deine lokale Zeitzone:",
+  "day": "Tag",
+  "days": "Tage",
+  "hour": "Stunde",
+  "hours": "Stunden",
+  "minute": "Minute",
+  "minutes": "Minuten",
+  "second": "Sekunde",
+  "seconds": "Sekunden",
+  "updateAvailable": "Update verfügbar: {version}",
+  "updateAvailableTooltip": "Version {version} ist verfügbar. Klicken, um die Download-Seite zu öffnen.",
+  "dayShort": "T"
+}

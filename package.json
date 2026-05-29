@@ -1,0 +1,28 @@
+{
+  "scripts": {
+    "dev": "millennium-ttc --build dev",
+    "build": "millennium-ttc --build prod"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.28.3",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/traverse": "^7.28.3",
+    "@types/react": "19.1.1",
+    "@types/react-dom": "19.1.1",
+    "@types/webpack": "^5.28.5",
+    "typescript": "^5.9.3"
+  },
+  "type": "module",
+  "name": "cs-weekly-drop",
+  "version": "1.2.0",
+  "description": "A Millennium plugin that shows a live countdown to the next Counter-Strike weekly drop reset on the CS2 library page.",
+  "main": "./frontend/index.tsx",
+  "author": "spix",
+  "license": "MIT",
+  "dependencies": {
+    "@steambrew/client": "^5.8.4",
+    "@steambrew/ttc": "^3.3.6",
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
+  }
+}
