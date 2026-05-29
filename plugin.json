@@ -1,0 +1,8 @@
+{
+  "$schema": "https://raw.githubusercontent.com/SteamClientHomebrew/Millennium/main/src/sys/plugin-schema.json",
+  "name": "cs-weekly-drop",
+  "common_name": "CS Weekly Drop Reset",
+  "description": "Shows a live countdown to the next Counter-Strike weekly drop reset on the CS2 library page.",
+  "version": "1.0.0",
+  "useBackend": false
+}
