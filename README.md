@@ -11,6 +11,10 @@ The countdown tile in the play bar:
 
 ![Drop Reset countdown tile](assets/tile.png)
 
+Hover over the tile to see the exact time in your local timezone:
+
+![Hover tooltip](assets/tooltip.png)
+
 ## Features
 
 - **Live countdown** to the next weekly drop reset, updated every second.
