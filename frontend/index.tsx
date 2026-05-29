@@ -2,6 +2,8 @@ import { definePlugin, Millennium } from "@steambrew/client";
 import { attach, detach, Mounted } from "./mounting";
 import { playBarModule } from "./tile";
 import { debug, warn, fail } from "./log";
+import { loadLocale } from "./locale";
+import { startUpdateChecker } from "./updater";
 
 const CS2_LABEL = /Counter-Strike\s*2/i;
 
@@ -116,6 +118,14 @@ function observe(tag: string, win: Window, doc: Document): void {
 
 export default definePlugin(() => {
   debug("plugin loaded");
+
+  loadLocale().then(() => {
+    debug("locale loaded");
+  }).catch((err) => {
+    warn("locale load failed", err);
+  });
+
+  startUpdateChecker();
 
   try {
     (Millennium as any).AddWindowCreateHook((ctx: any) => {

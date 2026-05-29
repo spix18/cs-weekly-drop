@@ -1,3 +1,5 @@
+import { t } from "./locale";
+
 const RESET_WEEKDAY = 3;
 const RESET_HOUR = 1;
 
@@ -40,12 +42,13 @@ export function shortForm(c: Countdown): string {
 }
 
 export function longForm(c: Countdown): string {
-  const piece = (value: number, name: string) => `${value} ${name}${value === 1 ? "" : "s"}`;
+  const piece = (value: number, name: string, plural: string) =>
+    `${value} ${value === 1 ? name : plural}`;
   return [
-    piece(c.days, "day"),
-    piece(c.hours, "hour"),
-    piece(c.minutes, "minute"),
-    piece(c.seconds, "second"),
+    piece(c.days, t("day"), t("days")),
+    piece(c.hours, t("hour"), t("hours")),
+    piece(c.minutes, t("minute"), t("minutes")),
+    piece(c.seconds, t("second"), t("seconds")),
   ].join(", ");
 }
 
