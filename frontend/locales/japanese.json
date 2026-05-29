@@ -12,7 +12,5 @@
   "minutes": "分",
   "second": "秒",
   "seconds": "秒",
-  "updateAvailable": "アップデートあり：{version}",
-  "updateAvailableTooltip": "バージョン {version} が利用可能です。クリックしてダウンロードページを開きます。",
   "dayShort": "日"
 }

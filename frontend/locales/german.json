@@ -12,7 +12,5 @@
   "minutes": "Minuten",
   "second": "Sekunde",
   "seconds": "Sekunden",
-  "updateAvailable": "Update verfügbar: {version}",
-  "updateAvailableTooltip": "Version {version} ist verfügbar. Klicken, um die Download-Seite zu öffnen.",
   "dayShort": "T"
 }

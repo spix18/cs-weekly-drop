@@ -12,7 +12,5 @@
   "minutes": "минут",
   "second": "секунда",
   "seconds": "секунд",
-  "updateAvailable": "Доступно обновление: {version}",
-  "updateAvailableTooltip": "Версия {version} доступна. Нажмите, чтобы открыть страницу загрузки.",
   "dayShort": "д"
 }

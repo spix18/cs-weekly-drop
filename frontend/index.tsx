@@ -3,7 +3,6 @@ import { attach, detach, Mounted } from "./mounting";
 import { playBarModule } from "./tile";
 import { debug, warn, fail } from "./log";
 import { loadLocale } from "./locale";
-import { startUpdateChecker } from "./updater";
 
 const CS2_LABEL = /Counter-Strike\s*2/i;
 
@@ -124,8 +123,6 @@ export default definePlugin(() => {
   }).catch((err) => {
     warn("locale load failed", err);
   });
-
-  startUpdateChecker();
 
   try {
     (Millennium as any).AddWindowCreateHook((ctx: any) => {

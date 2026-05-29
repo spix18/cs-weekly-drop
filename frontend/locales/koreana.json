@@ -12,7 +12,5 @@
   "minutes": "분",
   "second": "초",
   "seconds": "초",
-  "updateAvailable": "업데이트 가능: {version}",
-  "updateAvailableTooltip": "버전 {version}이(가) 출시되었습니다. 클릭하여 다운로드 페이지를 엽니다.",
   "dayShort": "일"
 }

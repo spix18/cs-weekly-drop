@@ -3,7 +3,6 @@ import { Component, ErrorInfo, ReactNode, useEffect, useState } from 'react';
 import { countdownTo, localStamp, longForm, nextReset, shortForm } from './countdown';
 import { fail } from './log';
 import { currentLocale, t } from './locale';
-import { availableVersion, openRelease } from './updater';
 
 type StyleMap = Record<string, string>;
 
@@ -87,13 +86,6 @@ const parachute = (
   </svg>
 );
 
-const updateIcon = (
-  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' width='100%' height='100%' fill='none' aria-hidden='true'>
-    <path d='M8 2a6 6 0 0 0-6 6h1.5a4.5 4.5 0 0 1 8.34-1.5H10l2.5 2.5L15 6.5h-1.9A6 6 0 0 0 8 2Z' fill='currentColor'/>
-    <path d='M2 9.5h1.9A6 6 0 0 0 14 8h-1.5a4.5 4.5 0 0 1-8.34 1.5H6L3.5 7 1 9.5Z' fill='currentColor'/>
-  </svg>
-);
-
 function DropResetTile() {
   const now = useTick();
 
@@ -101,7 +93,6 @@ function DropResetTile() {
 
   const target = nextReset(now);
   const left = countdownTo(target, now);
-  const upd = availableVersion();
 
   const tooltip = (
     <>
@@ -122,8 +113,8 @@ function DropResetTile() {
     <div
       data-cs-weekly-drop
       className={cx(playBarStyles.GameStat, playBarStyles.LastPlayed, 'Panel')}
-      style={{ height: 48, boxSizing: 'border-box', display: 'flex', alignItems: 'center', overflow: 'hidden', position: 'relative' }}
-      onClick={() => (upd ? openRelease() : launch(DROP_PAGE))}
+      style={{ height: 48, boxSizing: 'border-box', display: 'flex', alignItems: 'center', overflow: 'hidden' }}
+      onClick={() => launch(DROP_PAGE)}
     >
       <div
         className={playBarStyles.GameStatIcon}
@@ -135,37 +126,10 @@ function DropResetTile() {
         <div className={playBarStyles.PlayBarLabel}>{t('dropReset')}</div>
         <div className={cx(playBarStyles.PlayBarDetailLabel, playBarStyles.LastPlayedInfo)}>{shortForm(left)}</div>
       </div>
-      {upd && (
-        <div
-          title={t('updateAvailableTooltip', { version: upd })}
-          style={{
-            position: 'absolute',
-            top: 2,
-            right: 2,
-            width: 14,
-            height: 14,
-            color: '#59bf40',
-            cursor: 'pointer',
-            flexShrink: 0,
-          }}
-        >
-          {updateIcon}
-        </div>
-      )}
     </div>
   );
 
-  const updTooltip = upd
-    ? (
-      <>
-        <strong>{t('updateAvailable', { version: upd })}</strong>
-        <br />
-        {t('updateAvailableTooltip', { version: upd })}
-      </>
-    )
-    : tooltip;
-
-  const body = SteamTooltip ? <SteamTooltip toolTipContent={updTooltip}>{card}</SteamTooltip> : card;
+  const body = SteamTooltip ? <SteamTooltip toolTipContent={tooltip}>{card}</SteamTooltip> : card;
   return <RenderGuard>{body}</RenderGuard>;
 }
 

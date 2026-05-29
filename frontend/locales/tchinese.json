@@ -12,7 +12,5 @@
   "minutes": "分鐘",
   "second": "秒",
   "seconds": "秒",
-  "updateAvailable": "有新版本：{version}",
-  "updateAvailableTooltip": "新版本 {version} 已發布。點擊開啟下載頁面。",
   "dayShort": "天"
 }
