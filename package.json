@@ -14,7 +14,7 @@
   },
   "type": "module",
   "name": "cs-weekly-drop",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A Millennium plugin that shows a live countdown to the next Counter-Strike weekly drop reset on the CS2 library page.",
   "main": "./frontend/index.tsx",
   "author": "spix",

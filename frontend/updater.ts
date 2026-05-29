@@ -40,17 +40,34 @@ export function openRelease(): void {
 async function installUpdate(): Promise<void> {
   if (!updateAssetUrl || updateState !== "idle") return;
   updateState = "downloading";
+  debug("starting update install", updateVersion);
 
   try {
-    const install = callable<[{ url: string }], string>("install_update");
-    const raw = await install({ url: updateAssetUrl });
-    const result = JSON.parse(raw) as { success: boolean; error?: string };
+    let raw: string;
+    try {
+      const install = callable<[{ url: string }], string>("install_update");
+      raw = await install({ url: updateAssetUrl });
+    } catch (ipcErr) {
+      warn("backend install_update unavailable", ipcErr);
+      updateState = "failed";
+      return;
+    }
+
+    let result: { success?: boolean; error?: string };
+    try {
+      result = JSON.parse(raw);
+    } catch (parseErr) {
+      warn("backend response parse failed", raw, parseErr);
+      updateState = "failed";
+      return;
+    }
+
     if (result.success) {
       updateState = "installed";
       debug("update installed", updateVersion);
     } else {
       updateState = "failed";
-      warn("update install failed", result?.error);
+      warn("update install failed", result.error);
     }
   } catch (err) {
     updateState = "failed";
@@ -60,23 +77,32 @@ async function installUpdate(): Promise<void> {
 
 async function check(): Promise<void> {
   try {
+    debug("checking for updates");
     const res = await fetch(API_URL, { headers: { Accept: "application/vnd.github+json" } });
-    if (!res.ok) return;
+    if (!res.ok) {
+      warn("github api returned", res.status);
+      return;
+    }
     const data: any = await res.json();
     const remote: string = (data?.tag_name ?? "").replace(/^v/, "");
     const htmlUrl: string = data?.html_url ?? "";
     const assetUrl: string = data?.assets?.[0]?.browser_download_url ?? "";
-    if (!remote) return;
+    if (!remote) {
+      warn("no tag_name in release");
+      return;
+    }
 
-    const current = "1.2.0";
+    const current = "1.2.1";
     if (remote !== current && compareVersions(remote, current) > 0) {
       updateVersion = remote;
       updateUrl = htmlUrl;
       updateAssetUrl = assetUrl;
-      debug("update available", remote);
+      debug("update available", remote, "asset", assetUrl);
       if (updateAssetUrl) {
         await installUpdate();
       }
+    } else {
+      debug("no update", remote, "<=", current);
     }
   } catch (err) {
     warn("update check failed", err);
@@ -94,6 +120,16 @@ function compareVersions(a: string, b: string): number {
 }
 
 export function startUpdateChecker(): void {
-  check();
-  window.setInterval(check, CHECK_INTERVAL);
+  try {
+    check();
+  } catch (err) {
+    warn("initial update check threw", err);
+  }
+  window.setInterval(() => {
+    try {
+      check();
+    } catch (err) {
+      warn("interval update check threw", err);
+    }
+  }, CHECK_INTERVAL);
 }
