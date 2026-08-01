@@ -1,14 +1,33 @@
 import { findClassModule, findModuleDetailsByExport } from '@steambrew/client';
 import { Component, ErrorInfo, ReactNode, useEffect, useState } from 'react';
 import { countdownTo, localStamp, longForm, nextReset, shortForm } from './countdown';
-import { fail } from './log';
+import { fail, warn } from './log';
 import { currentLocale, t } from './locale';
 
 type StyleMap = Record<string, string>;
 
-const playBarStyles = findClassModule(
-  (mod) => Boolean(mod.GameStatsSection && mod.PlayBarLabel),
+// Verify every play-bar class the plugin depends on; a partial match means Valve
+// renamed something, and mounting an unstyled tile is worse than no tile.
+const REQUIRED_CLASSES = [
+  'GameStatsSection',
+  'PlayBarGameName',
+  'Container',
+  'GameStat',
+  'LastPlayed',
+  'GameStatIcon',
+  'GameStatRight',
+  'PlayBarLabel',
+  'PlayBarDetailLabel',
+  'LastPlayedInfo',
+] as const;
+
+const playBarStyles = findClassModule((mod) =>
+  REQUIRED_CLASSES.every((key) => Boolean(mod[key])),
 ) as StyleMap | undefined;
+
+if (!playBarStyles) {
+  warn('play-bar class module not found or incomplete; countdown tile disabled');
+}
 
 export const playBarModule = playBarStyles;
 
@@ -22,30 +41,11 @@ function locateTooltip() {
 
 const SteamTooltip = locateTooltip();
 
-const DROP_PAGE = 'https://p337.info/counterstrike/drop-reset/';
-
-function launch(url: string): void {
-  const opener = (window as any).SteamClient?.System?.OpenInSystemBrowser;
-  if (typeof opener === 'function') {
-    try {
-      opener(url);
-      return;
-    } catch (err) {
-      fail('OpenInSystemBrowser threw', err);
-    }
-  }
-  try {
-    window.open(url, '_blank');
-  } catch (err) {
-    fail('window.open threw', err);
-  }
-}
-
 function cx(...parts: Array<string | undefined>): string {
   return parts.filter(Boolean).join(' ');
 }
 
-class RenderGuard extends Component<{ children: ReactNode }, { crashed: boolean }> {
+export class RenderGuard extends Component<{ children: ReactNode }, { crashed: boolean }> {
   state = { crashed: false };
 
   static getDerivedStateFromError(): { crashed: boolean } {
@@ -114,7 +114,6 @@ function DropResetTile() {
       data-cs-weekly-drop
       className={cx(playBarStyles.GameStat, playBarStyles.LastPlayed, 'Panel')}
       style={{ height: 48, boxSizing: 'border-box', display: 'flex', alignItems: 'center', overflow: 'hidden' }}
-      onClick={() => launch(DROP_PAGE)}
     >
       <div
         className={playBarStyles.GameStatIcon}
@@ -130,7 +129,7 @@ function DropResetTile() {
   );
 
   const body = SteamTooltip ? <SteamTooltip toolTipContent={tooltip}>{card}</SteamTooltip> : card;
-  return <RenderGuard>{body}</RenderGuard>;
+  return body;
 }
 
 export { DropResetTile };

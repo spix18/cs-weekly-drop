@@ -1,6 +1,6 @@
 import { createElement } from "react";
 import { createRoot, Root } from "react-dom/client";
-import { DropResetTile } from "./tile";
+import { DropResetTile, RenderGuard } from "./tile";
 import { debug, fail } from "./log";
 
 export interface Mounted {
@@ -17,16 +17,19 @@ export function attach(doc: Document, host: Element): Mounted | null {
   node.style.display = "contents";
   host.appendChild(node);
 
+  let root: Root;
   try {
-    const root = createRoot(node);
-    root.render(createElement(DropResetTile));
-    debug("tile attached");
-    return { host, node, root };
+    root = createRoot(node);
   } catch (err) {
-    fail("render failed", err);
+    // createRoot is the only synchronous failure point; React renders
+    // asynchronously, so render-time throws are caught by RenderGuard below.
+    fail("createRoot failed", err);
     node.remove();
     return null;
   }
+  root.render(createElement(RenderGuard, null, createElement(DropResetTile)));
+  debug("tile attached");
+  return { host, node, root };
 }
 
 export function detach(mounted: Mounted): void {

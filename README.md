@@ -20,7 +20,6 @@ Hover over the tile to see the exact time in your local timezone:
 - **Live countdown** to the next weekly drop reset, updated every second.
 - **Native styling** — reuses Steam's own play-bar classes so the tile looks built-in.
 - **Hover tooltip** with the reset schedule and the exact reset time in your local timezone.
-- **Click through** to a detailed drop-reset info page.
 - **Lightweight & frontend-only** — no backend, no network calls, no telemetry.
 
 ## Drop reset schedule

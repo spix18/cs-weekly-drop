@@ -6,11 +6,13 @@ import { loadLocale } from "./locale";
 
 const CS2_LABEL = /Counter-Strike\s*2/i;
 
+// The CS2 library page carries exactly one stats row; if more than one
+// GameStatsSection matches (Valve renders duplicates), mount only the first so
+// the countdown never appears twice with drifting clocks.
 function findDropSections(doc: Document): Element[] {
   const styles = playBarModule;
-  if (!styles?.GameStatsSection || !styles.PlayBarGameName) return [];
+  if (!styles) return [];
 
-  const found: Element[] = [];
   const labels = Array.from(doc.querySelectorAll<HTMLElement>(`.${styles.PlayBarGameName}`));
 
   for (const label of labels) {
@@ -19,16 +21,53 @@ function findDropSections(doc: Document): Element[] {
     if (!CS2_LABEL.test((label.textContent ?? "").trim())) continue;
 
     let node: Element | null = label;
-    for (let hops = 0; hops < 10 && node; hops++) {
-      if (styles.Container && node.classList?.contains(styles.Container)) break;
+    for (let hops = 0; hops < 10 && node && !node.classList?.contains(styles.Container); hops++) {
       node = node.parentElement;
     }
+    if (!node || !node.classList?.contains(styles.Container)) continue;
 
-    const section = (node ?? doc).querySelector(`.${styles.GameStatsSection}`);
-    if (section && !found.includes(section)) found.push(section);
+    const section = node.querySelector(`.${styles.GameStatsSection}`);
+    if (section) return [section];
   }
 
-  return found;
+  return [];
+}
+
+// Guard against observe() running twice on one window; the originals are
+// restored when the window unloads, since plugins have no disable hook.
+const patchedWindows = new WeakSet<Window>();
+
+function patchHistory(tag: string, win: Window, enqueue: () => void): void {
+  if (patchedWindows.has(win)) return;
+  patchedWindows.add(win);
+  try {
+    const wrap = <F extends (...args: any[]) => any>(fn: F) =>
+      function (this: unknown, ...args: unknown[]) {
+        const result = (fn as any).apply(this, args);
+        enqueue();
+        return result;
+      };
+
+    const pushOriginal = win.history.pushState;
+    const replaceOriginal = win.history.replaceState;
+    win.history.pushState = wrap(pushOriginal) as typeof win.history.pushState;
+    win.history.replaceState = wrap(replaceOriginal) as typeof win.history.replaceState;
+
+    win.addEventListener(
+      "unload",
+      () => {
+        try {
+          win.history.pushState = pushOriginal;
+          win.history.replaceState = replaceOriginal;
+        } catch {
+          /* window already torn down, nothing to restore */
+        }
+      },
+      { once: true },
+    );
+  } catch (err) {
+    warn(`[${tag}] history hook failed`, err);
+  }
 }
 
 function observe(tag: string, win: Window, doc: Document): void {
@@ -79,23 +118,7 @@ function observe(tag: string, win: Window, doc: Document): void {
     }, 100);
   };
 
-  try {
-    const push = win.history.pushState.bind(win.history);
-    win.history.pushState = function (...a: any[]) {
-      const r = (push as any)(...a);
-      enqueue();
-      return r;
-    } as typeof win.history.pushState;
-
-    const replace = win.history.replaceState.bind(win.history);
-    win.history.replaceState = function (...a: any[]) {
-      const r = (replace as any)(...a);
-      enqueue();
-      return r;
-    } as typeof win.history.replaceState;
-  } catch (err) {
-    warn(`[${tag}] history hook failed`, err);
-  }
+  patchHistory(tag, win, enqueue);
 
   win.addEventListener("popstate", enqueue);
   win.addEventListener("hashchange", enqueue);

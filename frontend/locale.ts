@@ -40,8 +40,21 @@ const bcp47: Record<string, string> = {
 let active: LocaleMap = english as LocaleMap;
 let activeCode = "english";
 
+let pluralRules = new Intl.PluralRules(bcp47[activeCode]);
+
 export function currentLocale(): string {
   return bcp47[activeCode] ?? "en";
+}
+
+export function pluralForm(unit: string, value: number): string {
+  const category = pluralRules.select(value);
+  return (
+    active[`${unit}_${category}`] ??
+    (english as LocaleMap)[`${unit}_${category}`] ??
+    active[category === "one" ? unit : `${unit}s`] ??
+    (english as LocaleMap)[category === "one" ? unit : `${unit}s`] ??
+    unit
+  );
 }
 
 export function t(key: string, params?: Record<string, string>): string {
@@ -60,6 +73,7 @@ export async function loadLocale(): Promise<void> {
     if (lang && bundles[lang]) {
       active = bundles[lang];
       activeCode = lang;
+      pluralRules = new Intl.PluralRules(currentLocale());
     }
   } catch {
     active = english as LocaleMap;

@@ -12,5 +12,9 @@
   "minutes": "минут",
   "second": "секунда",
   "seconds": "секунд",
-  "dayShort": "д"
+  "dayShort": "д",
+  "day_few": "дня",
+  "hour_few": "часа",
+  "minute_few": "минуты",
+  "second_few": "секунды"
 }

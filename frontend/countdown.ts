@@ -1,4 +1,4 @@
-import { t } from "./locale";
+import { pluralForm, t } from "./locale";
 
 const RESET_WEEKDAY = 3;
 const RESET_HOUR = 1;
@@ -42,13 +42,12 @@ export function shortForm(c: Countdown): string {
 }
 
 export function longForm(c: Countdown): string {
-  const piece = (value: number, name: string, plural: string) =>
-    `${value} ${value === 1 ? name : plural}`;
+  const piece = (value: number, unit: string) => `${value} ${pluralForm(unit, value)}`;
   return [
-    piece(c.days, t("day"), t("days")),
-    piece(c.hours, t("hour"), t("hours")),
-    piece(c.minutes, t("minute"), t("minutes")),
-    piece(c.seconds, t("second"), t("seconds")),
+    piece(c.days, "day"),
+    piece(c.hours, "hour"),
+    piece(c.minutes, "minute"),
+    piece(c.seconds, "second"),
   ].join(", ");
 }
 
