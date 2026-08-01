@@ -4,33 +4,59 @@ import { playBarModule } from "./tile";
 import { debug, warn, fail } from "./log";
 import { loadLocale } from "./locale";
 
-const CS2_LABEL = /Counter-Strike\s*2/i;
+const CS2_APPID = 730;
 
-// The CS2 library page carries exactly one stats row; if more than one
-// GameStatsSection matches (Valve renders duplicates), mount only the first so
-// the countdown never appears twice with drifting clocks.
-function findDropSections(doc: Document): Element[] {
+// The library's in-memory router is reachable per window (same path size-on-disk
+// uses), so we know exactly which app's page is displayed — no DOM text matching.
+function currentAppId(win: Window): number | null {
+  const candidates = [
+    // The plugin itself runs in the shared desktop context, which owns the router.
+    (window as any).MainWindowBrowserManager?.m_lastLocation?.pathname,
+    // Some window scopes (desktop popups) carry their own manager.
+    (win as any).MainWindowBrowserManager?.m_lastLocation?.pathname,
+    // GamepadUI windows derive the route from the opener URL.
+    (() => {
+      try {
+        return win.opener?.location?.pathname;
+      } catch {
+        return undefined;
+      }
+    })(),
+  ];
+  for (const path of candidates) {
+    const match = typeof path === "string" ? path.match(/^\/library\/app\/(\d+)/) : null;
+    if (match) return Number(match[1]);
+  }
+  return null;
+}
+
+// Steam keeps cached library page trees stacked in the DOM; hidden clones still
+// report non-zero rects, so rect checks can't separate them. Hit-testing with
+// elementFromPoint tells us which tree is actually displayed on screen. Overlays
+// from the *same* page tree (tooltips, badges) wrap their content, so a hit that
+// contains the element is also a pass; clone trees never contain it.
+function onScreen(doc: Document, el: Element): boolean {
+  const r = el.getBoundingClientRect();
+  if (r.width <= 0 || r.height <= 0) return false;
+  const y = r.top + Math.min(10, r.height / 2);
+  for (const x of [r.left + 10, r.left + r.width / 2, r.right - 10]) {
+    const hit = doc.elementFromPoint(x, y);
+    if (hit && (hit === el || el.contains(hit) || hit.contains(el))) return true;
+  }
+  return false;
+}
+
+// Mount into the first *displayed* stats section — one tile, regardless of how
+// many cached page clones the document holds.
+function findDropSections(win: Window, doc: Document): Element[] {
   const styles = playBarModule;
   if (!styles) return [];
+  if (currentAppId(win) !== CS2_APPID) return [];
 
-  const labels = Array.from(doc.querySelectorAll<HTMLElement>(`.${styles.PlayBarGameName}`));
-
-  for (const label of labels) {
-    const box = label.getBoundingClientRect();
-    if (box.width <= 0 || box.height <= 0) continue;
-    if (!CS2_LABEL.test((label.textContent ?? "").trim())) continue;
-
-    let node: Element | null = label;
-    for (let hops = 0; hops < 10 && node && !node.classList?.contains(styles.Container); hops++) {
-      node = node.parentElement;
-    }
-    if (!node || !node.classList?.contains(styles.Container)) continue;
-
-    const section = node.querySelector(`.${styles.GameStatsSection}`);
-    if (section) return [section];
-  }
-
-  return [];
+  const visible = Array.from(doc.querySelectorAll(`.${styles.GameStatsSection}`)).filter((s) =>
+    onScreen(doc, s),
+  );
+  return visible.length ? [visible[0]] : [];
 }
 
 // Guard against observe() running twice on one window; the originals are
@@ -88,7 +114,7 @@ function observe(tag: string, win: Window, doc: Document): void {
       debug(`[${tag}] href`, href);
     }
 
-    const sections = findDropSections(doc);
+    const sections = findDropSections(win, doc);
     const wanted = new Set(sections);
 
     for (const [host, mounted] of live) {

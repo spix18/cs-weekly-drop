@@ -10,8 +10,6 @@ type StyleMap = Record<string, string>;
 // renamed something, and mounting an unstyled tile is worse than no tile.
 const REQUIRED_CLASSES = [
   'GameStatsSection',
-  'PlayBarGameName',
-  'Container',
   'GameStat',
   'LastPlayed',
   'GameStatIcon',
